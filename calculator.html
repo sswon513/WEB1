@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기초대사량 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        label {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        input, select, button {
+            padding: 8px;
+            margin-top: 5px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7e7e7;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BMR 및 TDEE 계산기</h1>
+
+    <label for="gender">성별</label>
+    <select id="gender">
+        <option value="남성">남성</option>
+        <option value="여성">여성</option>
+    </select>
+
+    <label for="weight">체중 (kg)</label>
+    <input type="number" id="weight" placeholder="체중을 입력하세요" required>
+
+    <label for="height">키 (cm)</label>
+    <input type="number" id="height" placeholder="키를 입력하세요" required>
+
+    <label for="age">나이</label>
+    <input type="number" id="age" placeholder="나이를 입력하세요" required>
+
+    <label for="activity">활동 수준</label>
+    <select id="activity">
+        <option value="운동 안 함">운동 안 함</option>
+        <option value="가벼운 운동">가벼운 운동</option>
+        <option value="중간 정도 운동">중간 정도 운동</option>
+        <option value="고강도 운동">고강도 운동</option>
+        <option value="매우 고강도 운동">매우 고강도 운동</option>
+    </select>
+
+    <button onclick="calculate()">계산</button>
+
+    <div class="result" id="result">
+        결과가 여기에 표시됩니다.
+    </div>
+
+    <script>
+        function calculate() {
+            var gender = document.getElementById("gender").value;
+            var weight = parseFloat(document.getElementById("weight").value);
+            var height = parseFloat(document.getElementById("height").value);
+            var age = parseInt(document.getElementById("age").value);
+            var activityLevel = document.getElementById("activity").value;
+
+            // 유효성 검사
+            if (isNaN(weight) || isNaN(height) || isNaN(age)) {
+                alert("체중, 키, 나이는 숫자로 입력해주세요.");
+                return;
+            }
+
+            // BMR 계산
+            var bmr;
+            if (gender === "남성") {
+                bmr = 88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age);
+            } else if (gender === "여성") {
+                bmr = 447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age);
+            } else {
+                alert("성별을 '남성' 또는 '여성'으로 선택하세요.");
+                return;
+            }
+
+            // TDEE 계산
+            var activityFactors = {
+                "운동 안 함": 1.2,
+                "가벼운 운동": 1.375,
+                "중간 정도 운동": 1.55,
+                "고강도 운동": 1.725,
+                "매우 고강도 운동": 1.9
+            };
+
+            var tdee = bmr * activityFactors[activityLevel];
+
+            // 결과 출력
+            document.getElementById("result").innerHTML = "BMR: " + bmr.toFixed(2) + " 칼로리<br>TDEE: " + tdee.toFixed(2) + " 칼로리";
+        }
+    </script>
+</body>
+</html>
